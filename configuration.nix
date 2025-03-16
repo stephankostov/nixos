@@ -13,7 +13,7 @@
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
+  boot.loader.grub.efiInstallAsRemovable = true;
   boot.loader.grub.device = "nodev";
   boot.loader.efi.efiSysMountPoint = "/boot"; # Assuming /mnt/boot is mounted during installation
   # Define on which hard drive you want to install Grub.
