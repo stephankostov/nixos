@@ -8,6 +8,12 @@
 
     nixpkgs.config.nvidia.acceptLicense = true;
 
+    nixpkgs.config.cudaSupport = true;
+    environment.systemPackages = with pkgs; [
+      nvidia_x11
+      nvidia_x11_cuda
+    ];
+
     hardware = {
       graphics = {
         enable = true;
@@ -19,7 +25,7 @@
       nvidia = {
 
         package = config.boot.kernelPackages.nvidiaPackages.stable; # Use 'stable' for modern GPUs.
-        
+
         # Modesetting is required.
         modesetting.enable = true;
 
@@ -40,7 +46,7 @@
         # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
         # Only available from driver 515.43.04+
         # Currently alpha-quality/buggy, so false is currently the recommended setting.
-        open = true;
+        open = false;
 
         # Enable the Nvidia settings menu,
         # accessible via `nvidia-settings`.
@@ -48,7 +54,7 @@
 
         # Optionally, you may need to select the appropriate driver version for your specific GPU.
         # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/os-specific/linux/nvidia-x11/default.nix
-        package = config.boot.kernelPackages.nvidiaPackages.beta;
+        # package = config.boot.kernelPackages.nvidiaPackages.beta;
       };
 
     };
