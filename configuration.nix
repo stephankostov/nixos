@@ -16,11 +16,9 @@
   boot.loader.grub.efiInstallAsRemovable = true;
   boot.loader.grub.device = "nodev";
   boot.loader.efi.efiSysMountPoint = "/boot"; # Assuming /mnt/boot is mounted during installation
-  # Define on which hard drive you want to install Grub.
-  # boot.loader.grub.device = "/dev/disk/by-label/boot"; # or "nodev" for efi only
   boot.loader.grub.useOSProber = true;
+  boot.loader.timeout = 10;
 
-  networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -38,6 +36,10 @@
     font = "Lat2-Terminus16";
     keyMap = "uk";
   #   useXkbConfig = true; # use xkb.options in tty.
+  };
+
+  security = {
+    sudo.wheelNeedsPassword = false;
   };
 
   # Enable the X11 windowing system.
@@ -70,6 +72,8 @@
      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
      packages = with pkgs; [
        tree
+       parted 
+       efibootmgr
      ];
      initialPassword = "p";
    };
@@ -105,6 +109,29 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  networking = {
+    hostName = "stephs-nixos";
+    interfaces = {
+      enp4s0 = {
+        ipv4.addresses = [ {
+          address = "192.168.0.50";
+          prefixLength = 24;
+        } ];
+      };
+    };
+    defaultGateway = "192.168.0.1";
+    nameservers = [ "1.1.1.1" "1.0.0.1" ];
+  };
+
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+  };
+
+  users.users.steph.openssh.authorizedKeys.keys = [
+
+  ];
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
