@@ -48,10 +48,10 @@
         package = config.boot.kernelPackages.nvidiaPackages.beta;
       };
 
-      # Load nvidia driver for Xorg and Wayland
-      services.xserver.videoDrivers = [ "nvidia" ];
-
     };
+
+    # Load nvidia driver for Xorg and Wayland
+    services.xserver.videoDrivers = [ "nvidia" ];
 
   };
 }
