@@ -74,6 +74,9 @@
        tree
        parted 
        efibootmgr
+       htop 
+       python311
+       python311Packages.pip
      ];
      initialPassword = "p";
    };
