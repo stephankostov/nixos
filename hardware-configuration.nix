@@ -17,7 +17,7 @@
     };
   fileSystems."/boot" = 
     { device = "/dev/disk/by-label/boot";
-      fsType = "fat32";
+      fsType = "vfat";
     }
 
   swapDevices = [ ];
