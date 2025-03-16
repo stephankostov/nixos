@@ -75,6 +75,15 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      "github.com" = {
+        identityFile = "~/.ssh/git_ed25519";
+      };
+    };
+  };
+
   programs.git = {
     enable = true;
     userName = "stephankostov";
