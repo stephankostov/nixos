@@ -130,7 +130,7 @@
   };
 
   users.users.steph.openssh.authorizedKeys.keys = [
-
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOnG6J0/Ekn3UMcf2wxaN02CrT5U10FCVaZWGHTOjXMP stephank179@gmail.com"
   ];
 
   # Copy the NixOS configuration file and link it from the resulting system
