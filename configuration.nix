@@ -17,7 +17,7 @@
   boot.loader.grub.device = "nodev";
   boot.loader.efi.efiSysMountPoint = "/boot"; # Assuming /mnt/boot is mounted during installation
   boot.loader.grub.useOSProber = true;
-  boot.loader.timeout = 10;
+  boot.loader.timeout = 7;
 
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
