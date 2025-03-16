@@ -17,6 +17,9 @@
       steam-hardware.enable = true;
 
       nvidia = {
+
+        package = config.boot.kernelPackages.nvidiaPackages.stable; # Use 'stable' for modern GPUs.
+        
         # Modesetting is required.
         modesetting.enable = true;
 
