@@ -165,7 +165,7 @@
     gc = {
       automatic = true;
       dates = "weekly"; # Adjust frequency as needed (e.g., weekly)
-      options = "--delete-older-than +5"; # Keep the latest 10 generations
+      options = "--delete-older-than +7"; # Keep the latest 10 generations
     };
   };
 
