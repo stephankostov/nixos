@@ -37,6 +37,7 @@
       vscode-server.nixosModules.default {
           services.vscode-server.enable = true;
           services.vscode-server.enableFHS = true;
+          services.nixos-vscode-ssh-fix.enable = true;
       }
 	  ];
 	};
