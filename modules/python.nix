@@ -6,6 +6,7 @@
         pip
         pytorch-bin
       ]))
+      uv
     ];
   };
 }
