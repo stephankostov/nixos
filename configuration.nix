@@ -156,10 +156,17 @@
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.11"; # Did you read the comment?
 
-  nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-    substituters = [ "https://cuda-maintainers.cachix.org" ];
-    trusted-public-keys = [  "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E=" ];
+  nix = {
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      substituters = [ "https://cuda-maintainers.cachix.org" ];
+      trusted-public-keys = [  "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E=" ];
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly"; # Adjust frequency as needed (e.g., weekly)
+      options = "--delete-older-than +5"; # Keep the latest 10 generations
+    };
   };
 
 }
