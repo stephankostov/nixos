@@ -74,7 +74,7 @@
     userEmail = "stephank179@gmail.com";
   };
 
-  services.auto-fix-vscode-server.enable = true;
+  # services.auto-fix-vscode-server.enable = true;
 
 
 }
