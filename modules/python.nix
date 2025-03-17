@@ -2,10 +2,12 @@
 {
   config = {
     environment.systemPackages = with pkgs; [ 
-      python311.withPackages (ps: with ps; [
-        pip 
-        pytorch-bin
-      ])
+      (python311.buildEnv.override {
+            extraLibs = with python311Packages; [
+              pip
+              pytorch-bin
+            ];
+      })
     ];
   };
 }
