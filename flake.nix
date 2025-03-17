@@ -10,10 +10,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    vscode-server.url = "github:nix-community/nixos-vscode-server";
+    # vscode-server.url = "github:nix-community/nixos-vscode-server";
   };
 
-  outputs = { self, nixpkgs, home-manager, vscode-server }:
+  outputs = { self, nixpkgs, home-manager }:
     let 
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -34,10 +34,10 @@
 	      home-manager.useUserPackages = true;
         home-manager.users.steph = { imports = [ ./home.nix ]; }; 
       }
-      vscode-server.nixosModules.default {
-          services.vscode-server.enable = true;
-          services.vscode-server.enableFHS = true;
-      }
+      # vscode-server.nixosModules.default {
+      #     services.vscode-server.enable = true;
+      #     services.vscode-server.enableFHS = true;
+      # }
 	  ];
 	};
       };
