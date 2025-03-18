@@ -85,6 +85,7 @@
      efibootmgr
      parted
      tree
+     devenv
   ];
 
   nixpkgs.config.allowUnfree = true;
