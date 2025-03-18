@@ -7,6 +7,7 @@
         pytorch-bin
       ]))
       uv
+      nix-ld # for dynamic dependancy linking
     ];
   };
 }
