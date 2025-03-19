@@ -176,6 +176,7 @@
 
 
   systemd.services.liquidcfg = {
+
     enable = true;
     description = "AIO startup service for liquidctl";
 
@@ -183,8 +184,11 @@
 
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.liquidctl}/bin/liquidctl initialize all";
-      ExecStart += "${pkgs.liquidctl}/bin/liquidctl --match H1 set sync speed 20";
+      User = "root";
+      ExecStart = [
+        "${pkgs.liquidctl}/bin/liquidctl initialize all"
+        "${pkgs.liquidctl}/bin/liquidctl --match H1 set sync speed 20"
+      ];
     };
   };
 
