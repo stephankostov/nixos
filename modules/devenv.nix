@@ -6,10 +6,10 @@
     environment.systemPackages = with pkgs; [ 
       devenv
       direnv
-      starship
+      # starship
     ];
 
-    programs.starship.enable = false;
+    # programs.starship.enable = true;
 
   };
   
