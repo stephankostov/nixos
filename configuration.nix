@@ -86,6 +86,7 @@
      parted
      tree
      devenv
+     direnv
   ];
 
   nixpkgs.config.allowUnfree = true;
