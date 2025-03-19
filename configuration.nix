@@ -85,6 +85,7 @@
      efibootmgr
      parted
      tree
+     liquictl
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -124,8 +125,11 @@
 
   services.openssh = {
     enable = true;
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "yes";
+    }
   };
 
   users.users.steph.openssh.authorizedKeys.keys = [
