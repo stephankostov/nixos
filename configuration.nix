@@ -129,7 +129,7 @@
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "yes";
-    }
+    };
   };
 
   users.users.steph.openssh.authorizedKeys.keys = [
