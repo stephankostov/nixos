@@ -6,10 +6,12 @@
     environment.systemPackages = with pkgs; [ 
       devenv
       direnv
-      # starship
     ];
 
-    # programs.starship.enable = true;
+    programs.direnv = {
+      enable = true;
+      silent = true;
+    }
 
   };
   
