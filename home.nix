@@ -78,14 +78,6 @@
     enable = true;
     bashrcExtra = ''
       eval "$(direnv hook bash)"
-      update_ps1() {
-        if [[ -n "$DIRENV_DIR" ]]; then
-          PS1="(devenv) $PS1"
-        else
-          PS1="\u@\h:\w\$ "
-        fi
-      }
-      PROMPT_COMMAND="update_ps1"
     '';
   };
 
