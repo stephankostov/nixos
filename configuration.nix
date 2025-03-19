@@ -85,7 +85,7 @@
      efibootmgr
      parted
      tree
-     liquictl
+     liquidctl
   ];
 
   nixpkgs.config.allowUnfree = true;
