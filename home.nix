@@ -74,6 +74,14 @@
     userEmail = "stephank179@gmail.com";
   };
 
+  programs.bash = {
+    enable = true;
+    bashrcExtra = ''
+      eval "$(direnv hook bash)"
+    '';
+  };
+
+
   # services.auto-fix-vscode-server.enable = true;
 
 
