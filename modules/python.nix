@@ -9,5 +9,7 @@
       uv
       nix-ld # for dynamic dependancy linking
     ];
+    programs.nix-ld.enable = true;
   };
+  
 }

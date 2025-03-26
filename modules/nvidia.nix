@@ -8,6 +8,7 @@
     environment.systemPackages = with pkgs; [
       linuxPackages.nvidia_x11
       cudaPackages_12_4.cudatoolkit
+      nvtop
     ];
 
     # Load nvidia driver for Xorg and Wayland

@@ -86,6 +86,8 @@
      parted
      tree
      liquidctl
+     lm_sensors
+     tmux
   ];
 
   nixpkgs.config.allowUnfree = true;
