@@ -8,7 +8,7 @@
     environment.systemPackages = with pkgs; [
       linuxPackages.nvidia_x11
       cudaPackages_12_4.cudatoolkit
-      nvtop
+      nvtopPackages.full
     ];
 
     # Load nvidia driver for Xorg and Wayland
@@ -50,6 +50,10 @@
         package = config.boot.kernelPackages.nvidiaPackages.stable; # Use 'stable' for modern GPUs.
       };
 
+    };
+
+    environment.variables = {
+      CUDA_PATH = "${pkgs.cudaPackages_12_4.cudatoolkit}";
     };
 
   };
