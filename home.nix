@@ -72,6 +72,7 @@
     enable = true;
     userName = "stephankostov";
     userEmail = "stephank179@gmail.com";
+    lfs.enable = true;
   };
 
   programs.bash = {
