@@ -34,6 +34,7 @@
     sudo.wheelNeedsPassword = false;
   };
 
+   users.users.steph = {
      isNormalUser = true;
      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
      initialPassword = "p";
