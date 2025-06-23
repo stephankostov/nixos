@@ -5,6 +5,7 @@
       (python311.withPackages (ps: with ps; [
         pip
         pytorch-bin
+        huggingface-hub
       ]))
       uv
       nix-ld # for dynamic dependancy linking
