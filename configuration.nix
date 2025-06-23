@@ -18,6 +18,7 @@
   boot.loader.efi.efiSysMountPoint = "/boot"; # Assuming /mnt/boot is mounted during installation
   boot.loader.grub.useOSProber = true;
   boot.loader.timeout = 7;
+  boot.supportedFilesystems = [ "ntfs" ];
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -28,6 +29,16 @@
     font = "Lat2-Terminus16";
     keyMap = "uk";
   #   useXkbConfig = true; # use xkb.options in tty.
+  };
+
+  fileSystems."/mnt/data" = {
+    device = "/dev/disk/by-uuid/C4AAD0FFAAD0EF44";
+    fsType = "ntfs-3g";
+    options = [ 
+      "rw"         
+      "uid=1000"
+      "gid=100"
+    ];
   };
 
   security = {
