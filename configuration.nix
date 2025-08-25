@@ -152,5 +152,9 @@
     };
   };
 
+  systemd.tmpfiles.rules = [
+  "w /sys/class/graphics/fbcon/cursor_blink - - - - 0" # disable cursor blink on default display (tty1)
+  ];
+
 }
 
