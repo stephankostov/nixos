@@ -17,7 +17,7 @@
   boot.loader.grub.device = "nodev";
   boot.loader.efi.efiSysMountPoint = "/boot"; # Assuming /mnt/boot is mounted during installation
   boot.loader.grub.useOSProber = true;
-  boot.loader.timeout = 7;
+  boot.loader.timeout = 4;
   boot.supportedFilesystems = [ "ntfs" ];
 
   # Set your time zone.
