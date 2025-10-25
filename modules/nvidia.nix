@@ -7,7 +7,7 @@
     nixpkgs.config.cudaSupport = true;
     environment.systemPackages = with pkgs; [
       linuxPackages.nvidia_x11
-      cudaPackages_12_4.cudatoolkit
+      cudaPackages_12_6.cudatoolkit
       nvtopPackages.full
     ];
 
@@ -47,7 +47,7 @@
     };
 
     environment.variables = {
-      CUDA_PATH = "${pkgs.cudaPackages_12_4.cudatoolkit}";
+      CUDA_PATH = "${pkgs.cudaPackages_12_6.cudatoolkit}";
     };
 
   };
