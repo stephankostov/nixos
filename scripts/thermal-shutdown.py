@@ -38,7 +38,10 @@ def main():
 
     out = subprocess.check_output([args.sensors_bin, "-j"], text=True)
     data = json.loads(out)
+    
     max_c = max_temp_c_from_sensors_json(data)
+    print(f"Checked temperatures, max is {max_c:.1f}C", flush=True)
+
     if max_c is None:
         raise SystemExit("No *_input temperature fields found in sensors -j output")
 
@@ -53,11 +56,7 @@ def main():
 
         hot_for = now - since
         if hot_for >= args.persist_sec:
-            subprocess.run(
-                ["logger", "-t", "thermal-shutdown",
-                 f"Temp {max_c:.1f}C >= {args.max_c:.1f}C for {hot_for}s; powering off"],
-                check=False,
-            )
+            print(f"Max temperature {max_c:.1f}C exceeded threshold {args.max_c}C for {hot_for} seconds, shutting down!", flush=True)
             subprocess.run(["systemctl", "poweroff"], check=False)
     else:
         try:

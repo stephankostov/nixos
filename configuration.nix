@@ -9,7 +9,7 @@ let
     name = "thermal-shutdown.py";
     executable = true;
     destination = "/bin/thermal-shutdown.py";
-    text = builtins.readFile ./scripts/thermal_shutdown.py;
+    text = builtins.readFile ./scripts/thermal-shutdown.py;
   };
 in
 {
@@ -188,7 +188,7 @@ in
       wantedBy = [ "timers.target" ];
       timerConfig = {
         OnBootSec = "2min";
-        OnUnitActiveSec = "30s";
+        OnUnitActiveSec = "60s";
         Unit = "thermal-shutdown.service";
       };
     };
