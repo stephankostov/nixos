@@ -4,6 +4,14 @@
 
 { config, lib, pkgs, ... }:
 
+let 
+  thermalScript = pkgs.writeTextFile {
+    name = "thermal-shutdown.py";
+    executable = true;
+    destination = "/bin/thermal-shutdown.py";
+    text = builtins.readFile ./scripts/thermal_shutdown.py;
+  };
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -45,12 +53,30 @@
     sudo.wheelNeedsPassword = false;
   };
 
-   users.users.steph = {
-     isNormalUser = true;
-     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-     initialPassword = "p";
-   };
-
+  users = {
+    mutableUsers = false; # Enable this to allow changing user passwords
+    users = {
+      root = {
+        hashedPassword = "$6$nix_user_root$Z.Bf0Ldzv01r82pXOLwCTTEcUuicabL3H0Kh0Lx/VKWzKRs2IZXBcvq/AbuIEh0hBSplAfY.RPZ5UB0ml3YFo/";
+      };
+      steph = {
+        isNormalUser = true;
+        extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+        hashedPassword = "$6$nix_user_steph$VVxsarx0BA1RgezQ3GSeeYs.Y0UHmK6R6H8pO8TrBLIc0h97uLiOEjrCooMEN2lFYFTUgSodFZ3r6z8wgAyUD/";
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOnG6J0/Ekn3UMcf2wxaN02CrT5U10FCVaZWGHTOjXMP stephank179@gmail.com"
+        ];
+      };
+      freeloader = {
+        isNormalUser = true;
+        createHome = true;
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1SxVq0lkopOaPTeHuWUGD8xFvJVM8/9nTV9wE1djFS steph@stephs-nixos"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK8nKtigmlZv0v+pTIT+HEVih+QTds2r8NeTRHWm3q/u anton@rahmenwerk"
+        ];
+      };
+    };
+  };
 
   environment.systemPackages = with pkgs; [
      vim
@@ -67,6 +93,7 @@
      unzip 
      openrgb-with-all-plugins
      git-lfs
+     fast-cli
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -87,6 +114,16 @@
     };
     defaultGateway = "192.168.0.1";
     nameservers = [ "1.1.1.1" "1.0.0.1" ];
+
+    # wireless = {
+    #   enable = true;
+    #   networks = {
+    #     "Warrender Toad" = {
+    #       pskRaw = "b3ecb89a420a35f85540fbbccf5ff36f2b8d361481036e7babd42c5eaf5737c8";
+    #     };
+    #   };
+    # };
+
   };
 
   services.openssh = {
@@ -96,20 +133,6 @@
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "yes";
     };
-  };
-
-  users.users.steph.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOnG6J0/Ekn3UMcf2wxaN02CrT5U10FCVaZWGHTOjXMP stephank179@gmail.com"
-  ];
-
-  users.users.freeloader = {
-      isNormalUser = true;
-      home = "/home/freeloader";
-      createHome = true;
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1SxVq0lkopOaPTeHuWUGD8xFvJVM8/9nTV9wE1djFS steph@stephs-nixos"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK8nKtigmlZv0v+pTIT+HEVih+QTds2r8NeTRHWm3q/u anton@rahmenwerk"
-      ];
   };
 
   system.stateVersion = "24.11"; # Did you read the comment?
@@ -148,6 +171,25 @@
           "${pkgs.liquidctl}/bin/liquidctl initialize all"
           "${pkgs.liquidctl}/bin/liquidctl --match H1 set sync speed 20"
         ];
+      };
+    };
+    thermal-shutdown = {
+      description = "Shutdown if temperatures stay too high";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${thermalScript}/bin/thermal-shutdown.py --max-c 99 --persist-sec 600";
+      };
+      path = [ pkgs.lm_sensors pkgs.python3 pkgs.util-linux pkgs.coreutils ];
+    };
+  };
+
+  systemd.timers = {
+    thermal-shutdown = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "2min";
+        OnUnitActiveSec = "30s";
+        Unit = "thermal-shutdown.service";
       };
     };
   };
