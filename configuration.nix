@@ -11,6 +11,12 @@ let
     destination = "/bin/thermal-shutdown.py";
     text = builtins.readFile ./scripts/thermal-shutdown.py;
   };
+  fanControlScript = pkgs.writeTextFile {
+    name = "fan-control.py";
+    executable = true;
+    destination = "/bin/fan-control.py";
+    text = builtins.readFile ./scripts/fan-control.py;
+  };
 in
 {
   imports =
@@ -160,18 +166,18 @@ in
   };
 
   systemd.services = {
-    liquidcfg = {
-      enable = true;
-      description = "AIO startup service for liquidctl";
-      wantedBy = [ "default.target" ];
+    fan-control = {
+      description = "Software fan curve via sensors + liquidctl";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "multi-user.target" ];
       serviceConfig = {
-        Type = "oneshot";
+        Type = "simple";
         User = "root";
-        ExecStart = [
-          "${pkgs.liquidctl}/bin/liquidctl initialize all"
-          "${pkgs.liquidctl}/bin/liquidctl --match H1 set sync speed 20"
-        ];
+        Restart = "always";
+        RestartSec = "5s";
+        ExecStart = "${fanControlScript}/bin/fan-control.py --interval 30 --curve 30:30 50:60 80:100";
       };
+      path = [ pkgs.lm_sensors pkgs.liquidctl pkgs.python3 pkgs.coreutils ];
     };
     thermal-shutdown = {
       description = "Shutdown if temperatures stay too high";
