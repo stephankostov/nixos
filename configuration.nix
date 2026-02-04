@@ -5,7 +5,7 @@
 { config, lib, pkgs, ... }:
 
 let 
-  thermalScript = pkgs.writeTextFile {
+  thermalShutdownScript = pkgs.writeTextFile {
     name = "thermal-shutdown.py";
     executable = true;
     destination = "/bin/thermal-shutdown.py";
@@ -16,6 +16,12 @@ let
     executable = true;
     destination = "/bin/fan-control.py";
     text = builtins.readFile ./scripts/fan-control.py;
+  };
+  idleShutdownScript = pkgs.writeTextFile {
+    name = "idle-shutdown.py";
+    executable = true;
+    destination = "/bin/idle-shutdown.py";
+    text = builtins.readFile ./scripts/idle-shutdown.py;
   };
 in
 {
@@ -183,10 +189,19 @@ in
       description = "Shutdown if temperatures stay too high";
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${thermalScript}/bin/thermal-shutdown.py --max-c 99 --persist-sec 600";
+        ExecStart = "${thermalShutdownScript}/bin/thermal-shutdown.py --max-c 99 --persist-sec 600";
         LoadCredential = "smpt_gmail_app_password:/etc/credstore/smpt_gmail_app_password";
       };
       path = [ pkgs.lm_sensors pkgs.python3 pkgs.util-linux pkgs.coreutils ];
+    };
+    idle-shutdown = {
+      description = "Shutdown system if idle";
+      serviceConfig = {
+        Type = "simple";
+        User = "root";
+        ExecStart = "${idleShutdownScript}/bin/idle-shutdown.py --threshold 10 --checks 6 --between-sec 60";
+      };
+      path = [ pkgs.systemd pkgs.python3 ];
     };
   };
 
@@ -197,6 +212,20 @@ in
         OnBootSec = "2min";
         OnUnitActiveSec = "60s";
         Unit = "thermal-shutdown.service";
+      };
+    };
+    nightly-shutdown = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = [
+          "*-*-* 23:00:00"
+          "*-*-* 00:00:00"
+          "*-*-* 01:00:00"
+          "*-*-* 03:00:00"
+          "*-*-* 05:00:00"
+        ];
+        Persistent = true;
+        Unit = "idle-shutdown.service";
       };
     };
   };
