@@ -89,7 +89,7 @@ def main():
             set_sync_speed(args.liquidctl_bin, duty)
             last_duty = duty
             last_temp = temp
-            print(f"Set fan speed to {duty}% for temp {temp:.1f}°C")
+            print(f"Set fan speed to {duty}% for temp {temp:.1f}°C", flush=True)
 
         time.sleep(args.interval)
 
