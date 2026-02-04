@@ -178,6 +178,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${thermalScript}/bin/thermal-shutdown.py --max-c 99 --persist-sec 600";
+        LoadCredential = "smpt_gmail_app_password:/etc/credstore/smpt_gmail_app_password";
       };
       path = [ pkgs.lm_sensors pkgs.python3 pkgs.util-linux pkgs.coreutils ];
     };

@@ -4,6 +4,24 @@ import json
 import subprocess
 import time
 from pathlib import Path
+import os
+
+import smtplib
+from email.mime.text import MIMEText
+
+def send_alert_email(sender, app_password, recipient, subject, body):
+    msg = MIMEText(body)
+    msg["Subject"] = subject
+    msg["From"] = sender
+    msg["To"] = recipient
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as s:
+        s.login(sender, app_password)
+        s.sendmail(sender, [recipient], msg.as_string())
+
+def read_credential(name: str) -> str:
+    cred_dir = Path(os.environ["CREDENTIALS_DIRECTORY"])
+    return (cred_dir / name).read_text().strip()
 
 STATE_DIR = Path("/run/thermal-shutdown")
 STATE_FILE = STATE_DIR / "since_epoch"
@@ -57,6 +75,11 @@ def main():
         hot_for = now - since
         if hot_for >= args.persist_sec:
             print(f"Max temperature {max_c:.1f}C exceeded threshold {args.max_c}C for {hot_for} seconds, shutting down!", flush=True)
+            send_alert_email(
+                sender="stephhacks1337@gmail.com", app_password=read_credential("smpt_gmail_app_password"),
+                recipient="stephank179@gmail.com", subject="Thermal Shutdown Alert (LINUX-PC)",
+                body=f"Max temperature {max_c:.1f}C exceeded threshold {args.max_c}C for {hot_for} seconds, shutting down!"
+            )
             subprocess.run(["systemctl", "poweroff"], check=False)
     else:
         try:
