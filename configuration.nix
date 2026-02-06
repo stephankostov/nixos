@@ -158,8 +158,8 @@ in
     };
     gc = {
       automatic = true;
-      dates = "weekly"; # Adjust frequency as needed (e.g., weekly)
-      options = "--delete-older-than +7"; # Keep the latest 10 generations
+      dates = "weekly";
+      options = "--delete-older-than +7";
     };
   };
 
