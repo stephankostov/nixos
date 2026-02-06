@@ -224,7 +224,7 @@ in
           "*-*-* 03:00:00"
           "*-*-* 05:00:00"
         ];
-        Persistent = true;
+        Persistent = false;
         Unit = "idle-shutdown.service";
       };
     };
