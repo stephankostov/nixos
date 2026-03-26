@@ -82,6 +82,19 @@
     '';
   };
 
+  xdg.enable = true;
+
+  xdg.dataFile."jupyter/kernels/devshell/kernel.json" = {
+    source = ./jupyter/kernel.json;
+    force = true;
+  };
+
+  xdg.dataFile."jupyter/kernels/devshell/jupyter-devshell-entry.sh" = {
+    source = ./jupyter/jupyter-devshell-entry.sh;
+    executable = true;
+    force = true;
+  };
+
 
   # services.auto-fix-vscode-server.enable = true;
 

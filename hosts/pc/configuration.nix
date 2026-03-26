@@ -106,6 +106,7 @@ in
      openrgb-with-all-plugins
      git-lfs
      fast-cli
+     gcc
   ];
 
   nixpkgs.config.allowUnfree = true;

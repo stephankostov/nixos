@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "{resource_dir}/jupyter-devshell-entry.sh",
+    "{connection_file}"
+  ],
+  "display_name": "python (nix devshell)",
+  "language": "python",
+  "metadata": { "debugger": true }
+}
