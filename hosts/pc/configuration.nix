@@ -9,19 +9,19 @@ let
     name = "thermal-shutdown.py";
     executable = true;
     destination = "/bin/thermal-shutdown.py";
-    text = builtins.readFile ./scripts/thermal-shutdown.py;
+    text = builtins.readFile repoRoot + "/scripts/thermal-shutdown.py";
   };
   fanControlScript = pkgs.writeTextFile {
     name = "fan-control.py";
     executable = true;
     destination = "/bin/fan-control.py";
-    text = builtins.readFile ./scripts/fan-control.py;
+    text = builtins.readFile repoRoot + "/scripts/fan-control.py";
   };
   idleShutdownScript = pkgs.writeTextFile {
     name = "idle-shutdown.py";
     executable = true;
     destination = "/bin/idle-shutdown.py";
-    text = builtins.readFile ./scripts/idle-shutdown.py;
+    text = builtins.readFile repoRoot + "/scripts/idle-shutdown.py";
   };
 in
 {

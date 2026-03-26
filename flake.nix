@@ -21,6 +21,9 @@
         homeImports ? [ ./home.nix ],
       }: lib.nixosSystem {
         inherit system;
+        specialArgs = {
+          repoRoot = self;
+        };
         modules =
           [
             ./hosts/${hostName}/configuration.nix
@@ -64,8 +67,6 @@
           hostName = "pi";
           system = "aarch64-linux";
           extraModules = [
-            ./modules/python.nix
-            ./modules/devenv.nix
           ];
         };
       };
