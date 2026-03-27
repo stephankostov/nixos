@@ -76,14 +76,6 @@ in
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOnG6J0/Ekn3UMcf2wxaN02CrT5U10FCVaZWGHTOjXMP stephank179@gmail.com"
         ];
       };
-      freeloader = {
-        isNormalUser = true;
-        createHome = true;
-        openssh.authorizedKeys.keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1SxVq0lkopOaPTeHuWUGD8xFvJVM8/9nTV9wE1djFS steph@stephs-nixos"
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK8nKtigmlZv0v+pTIT+HEVih+QTds2r8NeTRHWm3q/u anton@rahmenwerk"
-        ];
-      };
     };
   };
 
@@ -110,7 +102,7 @@ in
 
   networking = {
     networkmanager.enable = true;
-    hostName = "stephs-nixos";
+    hostName = "stephs-pc";
     interfaces = {
       enp4s0 = {
         ipv4.addresses = [ {
