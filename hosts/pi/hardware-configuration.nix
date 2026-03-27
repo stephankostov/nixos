@@ -13,12 +13,23 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
+  fileSystems."/boot/firmware" = {
+    device = "/dev/disk/by-label/BOOT";  # use your own
+    fsType = "vfat";
+    options = [
+      "noatime"
+      "noauto"
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=1min"
+    ];
+  };
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/56f80fa2-e005-4cca-86e6-19da1069914d";
+    device = "/dev/disk/by-label/nixos";   # your own label
     fsType = "ext4";
+    options = [ "noatime" ];
   };
   fileSystems."/mnt/storage" = {
-    device = "/dev/disk/by-uuid/631628a4-a898-4cd5-be3c-4851dac51d91";
+    device = "/dev/disk/by-label/storage";
     fsType = "ext4";
   };
 

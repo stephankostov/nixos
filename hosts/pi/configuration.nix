@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, repoRoot, ... }:
+{ config, lib, pkgs, modulesPath, repoRoot, ... }:
 
 let 
 
@@ -12,9 +12,6 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
-
-  boot.supportedFilesystems = [ "ntfs" ];
-  boot.loader.generic-extlinux-compatible.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -71,7 +68,10 @@ in
         prefixLength = 24;
       }
     ];
-    defaultGateway = "192.168.0.1";
+    defaultGateway = {
+      address = "192.168.0.1";
+      interface = "eth0";
+    };
     nameservers = [ "1.1.1.1" "1.0.0.1" ];
   };
 
