@@ -62,7 +62,7 @@ in
     hostName = "stephs-pi";
     useNetworkd = true;
     useDHCP = false;
-    interfaces.eth0.ipv4.addresses = [
+    interfaces.end0.ipv4.addresses = [
       {
         address = "192.168.0.103";
         prefixLength = 24;
@@ -70,7 +70,7 @@ in
     ];
     defaultGateway = {
       address = "192.168.0.1";
-      interface = "eth0";
+      interface = "end0";
     };
     nameservers = [ "1.1.1.1" "1.0.0.1" ];
   };
