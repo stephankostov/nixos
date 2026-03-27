@@ -63,7 +63,10 @@
     enable = true;
     matchBlocks = {
       "github.com" = {
-        identityFile = "~/.ssh/git_ed25519";
+        hostname = "github.com";           # optional but explicit
+        user = "git";                      # common for GitHub
+        identityFile = [ "~/.ssh/git" ];
+        identitiesOnly = true;             # recommended
       };
     };
   };

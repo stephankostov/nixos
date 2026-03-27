@@ -122,31 +122,5 @@
         };
       };
 
-
-      packages = {
-        aarch64-linux = {
-          # SD image from the Pi config
-          pi-sd-image =
-            self.nixosConfigurations.pi.config.system.build.sdImage;
-        };
-      };
-
-      homeConfigurations = {
-        steph-pc = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            system = "x86_64-linux";
-            config.allowUnfree = true;
-          };
-          modules = [ ./home.nix ];
-        };
-
-        steph-pi = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            system = "aarch64-linux";
-            config.allowUnfree = true;
-          };
-          modules = [ ./home.nix ];
-        };
-      };
     };
 }
