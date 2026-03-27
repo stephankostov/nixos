@@ -99,7 +99,6 @@
             ({ ... }: {
               imports = with nixos-raspberrypi.nixosModules; [
                 raspberry-pi-5.base
-                raspberry-pi-5.display-vc4   # or display-rp1 if that matches your display
                 raspberry-pi-5.bluetooth
               ];
             })
