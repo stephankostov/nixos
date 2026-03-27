@@ -26,7 +26,7 @@ let
 in
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
     ];
 
@@ -40,15 +40,12 @@ in
   boot.loader.timeout = 4;
   boot.supportedFilesystems = [ "ntfs" ];
 
-  # Set your time zone.
   time.timeZone = "Europe/London";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
     font = "Lat2-Terminus16";
     keyMap = "uk";
-  #   useXkbConfig = true; # use xkb.options in tty.
   };
 
   fileSystems."/mnt/data" = {
@@ -66,14 +63,14 @@ in
   };
 
   users = {
-    mutableUsers = false; # Enable this to allow changing user passwords
+    mutableUsers = false; 
     users = {
       root = {
         hashedPassword = "$6$nix_user_root$Z.Bf0Ldzv01r82pXOLwCTTEcUuicabL3H0Kh0Lx/VKWzKRs2IZXBcvq/AbuIEh0hBSplAfY.RPZ5UB0ml3YFo/";
       };
       steph = {
         isNormalUser = true;
-        extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+        extraGroups = [ "wheel" "networkmanager" ];
         hashedPassword = "$6$nix_user_steph$VVxsarx0BA1RgezQ3GSeeYs.Y0UHmK6R6H8pO8TrBLIc0h97uLiOEjrCooMEN2lFYFTUgSodFZ3r6z8wgAyUD/";
         openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOnG6J0/Ekn3UMcf2wxaN02CrT5U10FCVaZWGHTOjXMP stephank179@gmail.com"
@@ -128,15 +125,6 @@ in
     defaultGateway = "192.168.0.1";
     nameservers = [ "1.1.1.1" "1.0.0.1" ];
 
-    # wireless = {
-    #   enable = true;
-    #   networks = {
-    #     "Warrender Toad" = {
-    #       pskRaw = "b3ecb89a420a35f85540fbbccf5ff36f2b8d361481036e7babd42c5eaf5737c8";
-    #     };
-    #   };
-    # };
-
   };
 
   services.openssh = {
@@ -148,7 +136,7 @@ in
     };
   };
 
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "24.11"; 
 
   nix = {
     settings = {

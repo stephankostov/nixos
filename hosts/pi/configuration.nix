@@ -9,19 +9,16 @@ let
 in
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
     ];
 
-  # Set your time zone.
   time.timeZone = "Europe/London";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
     font = "Lat2-Terminus16";
     keyMap = "uk";
-  #   useXkbConfig = true; # use xkb.options in tty.
   };
 
   system.stateVersion = "25.11";
@@ -31,14 +28,14 @@ in
   };
 
   users = {
-    mutableUsers = false; # Enable this to allow changing user passwords
+    mutableUsers = false; 
     users = {
       root = {
         hashedPassword = "$6$nix_user_root$Z.Bf0Ldzv01r82pXOLwCTTEcUuicabL3H0Kh0Lx/VKWzKRs2IZXBcvq/AbuIEh0hBSplAfY.RPZ5UB0ml3YFo/";
       };
       steph = {
         isNormalUser = true;
-        extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+        extraGroups = [ "wheel" "networkmanager" ];
         hashedPassword = "$6$nix_user_steph$VVxsarx0BA1RgezQ3GSeeYs.Y0UHmK6R6H8pO8TrBLIc0h97uLiOEjrCooMEN2lFYFTUgSodFZ3r6z8wgAyUD/";
         openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIACR9JUn1C9HQdlay+PhnK0YvZq7mxQJ5a9UUtA9q6vq steph@Stephans-MacBook-Pro.local"
