@@ -59,8 +59,11 @@ in
   nixpkgs.config.allowUnfree = true;
 
   networking = {
+ firewall = {
+  enable= true;
+  logRefusedConnections = false;};
     hostName = "stephs-pi";
-    useNetworkd = true;
+    networkmanager.enable = true;
     useDHCP = false;
     interfaces.end0.ipv4.addresses = [
       {
@@ -69,8 +72,8 @@ in
       }
     ];
     defaultGateway = {
-      address = "192.168.0.1";
-      interface = "end0";
+       address = "192.168.0.1";
+       interface = "end0";
     };
     nameservers = [ "1.1.1.1" "1.0.0.1" ];
   };
