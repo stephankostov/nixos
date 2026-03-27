@@ -23,44 +23,6 @@
   outputs = { self, nixpkgs, home-manager, vscode-server, nixos-raspberrypi, ... }:
     let
       lib = nixpkgs.lib;
-
-      mkHost = {
-        hostName,
-        system,
-        extraModules ? [ ],
-        homeImports ? [ ./home.nix ],
-      }: lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          repoRoot = self;
-        };
-        modules =
-          [
-            ./hosts/${hostName}/configuration.nix
-
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.steph = { imports = homeImports; };
-            }
-
-            vscode-server.nixosModules.default
-            {
-              services.vscode-server.enable = true;
-            }
-          ]
-          ++ extraModules;
-      };
-
-      mkHome = { system }: home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
-        modules = [ ./home.nix ];
-      };
-
     in {
       nixosConfigurations = {
         pc = lib.nixosSystem {
@@ -105,14 +67,12 @@
 
             ./hosts/pi/configuration.nix
 
-            # Same HM + VSCode as PC
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.steph = { imports = [ ./home.nix ]; };
             }
-
             vscode-server.nixosModules.default
             {
               services.vscode-server.enable = true;
