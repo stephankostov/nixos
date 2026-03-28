@@ -75,7 +75,7 @@
             }
 
             vscode-server.nixosModules.default
-            ./modules/vscode-server-extensions.nix
+            ./modules/vscode-server.nix
             ({ pkgs, ... }: {
               services.vscode-server.enable = true;
               services.vscode-server-extensions = with pkgs.vscode-extensions; [
