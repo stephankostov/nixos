@@ -51,6 +51,7 @@ in
      htop
      unzip
      tmux
+     wireguard-tools
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -110,6 +111,78 @@ in
 
   systemd.timers = {
     
+  };
+
+  virtualisation = {
+    docker.enable = true;
+
+    oci-containers = {
+      backend = "docker";
+      containers.home-assistant = {
+        image = "ghcr.io/home-assistant/home-assistant:stable";
+        autoStart = true;
+
+        volumes = [
+          "/var/lib/hass:/config"
+          "/etc/localtime:/etc/localtime:ro"
+          "/run/dbus:/run/dbus:ro"
+        ];
+
+        extraOptions = [
+          "--privileged"
+          "--network=host"
+          "--device=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_e2926cd33827ee11bee58fc1f49e3369-if00-port0:/dev/ttyUSB0"
+        ];
+
+        environment = {
+          TZ = "Europe/London";
+        };
+      };
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [ 
+    8123 # home-assistant
+    62180 # wireguard
+  ];
+
+  networking.firewall.allowedUDPPorts = [
+    62180  # WireGuard listenPort
+  ];
+
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv6.conf.all.forwarding" = 1;
+  };
+
+  networking.nat = {
+    enable = true;
+    externalInterface = "end0";     # your internet uplink
+    internalInterfaces = [ "wg0" ];
+  };
+
+  networking.wireguard = {
+    enable = true;
+    interfaces = {
+      wg0 = {
+        ips = [ "10.7.0.1/24" ];
+        listenPort = 62180;
+        privateKeyFile = "/root/wireguard/server.key";  
+        mtu = 1492;
+        peers = [
+          {
+            publicKey = "jxJfI7b1y0v5XagURfqUQAo7S1SYmJ5219ZNyNAvKno=";
+            presharedKeyFile = "/root/wireguard/laptop.psk";
+            allowedIPs = [ "10.7.0.2/32" ];
+          }
+          {
+            publicKey = "3o2AmuB2gLE3LJk6yFlIFZPQ4RbdmQj0vO6OdiEJGmw=";
+            presharedKeyFile = "/root/wireguard/phone.psk";
+            allowedIPs = [ "10.7.0.3/32" ];
+          }
+        ];
+      };
+    };
   };
 
 }
