@@ -82,6 +82,7 @@
                 bbenoist.nix   # or nix-community.nix-ide
               ];
             })
+          ];
         };
       };
 
