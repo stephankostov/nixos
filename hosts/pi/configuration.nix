@@ -191,5 +191,8 @@ in
     dataDir = "/var/lib/plex";
   };
 
+  users.groups.media = {};
+  users.users.plex.extraGroups = [ "media" ];
+
 }
 
