@@ -73,11 +73,15 @@
               home-manager.useUserPackages = true;
               home-manager.users.steph = { imports = [ ./home.nix ]; };
             }
+
             vscode-server.nixosModules.default
-            {
+            ./modules/vscode-server-extensions.nix
+            ({ pkgs, ... }: {
               services.vscode-server.enable = true;
-            }
-          ];
+              services.vscode-server-extensions = with pkgs.vscode-extensions; [
+                bbenoist.nix   # or nix-community.nix-ide
+              ];
+            })
         };
       };
 
