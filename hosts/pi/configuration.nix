@@ -12,6 +12,8 @@ let
     text = builtins.readFile (repoRoot + "/scripts/ip-change-detect.py");
   };
 
+  root0400 = { owner = "root"; group = "root"; mode = "0400"; };
+
 in
 {
   imports =
@@ -58,6 +60,8 @@ in
      unzip
      tmux
      wireguard-tools
+     age
+     sops
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -187,17 +191,17 @@ in
       wg0 = {
         ips = [ "10.7.0.1/24" ];
         listenPort = 62180;
-        privateKeyFile = "/root/wireguard/server.key";  
+        privateKeyFile = config.sops.secrets.wireguard_server_private_key.path;  
         mtu = 1492;
         peers = [
           {
             publicKey = "jxJfI7b1y0v5XagURfqUQAo7S1SYmJ5219ZNyNAvKno=";
-            presharedKeyFile = "/root/wireguard/laptop.psk";
+            presharedKeyFile = config.sops.secrets.wireguard_client_laptop_preshared_key.path;
             allowedIPs = [ "10.7.0.2/32" ];
           }
           {
             publicKey = "3o2AmuB2gLE3LJk6yFlIFZPQ4RbdmQj0vO6OdiEJGmw=";
-            presharedKeyFile = "/root/wireguard/phone.psk";
+            presharedKeyFile = config.sops.secrets.wireguard_client_phone_preshared_key.path;
             allowedIPs = [ "10.7.0.3/32" ];
           }
         ];
@@ -250,6 +254,20 @@ in
     };
   };
 
+  sops = {
+    defaultSopsFile = repoRoot + "/secrets/secrets.json";
+    defaultSopsFormat = "json";
+    age.keyFile = "/root/.config/age/keys.txt";
+    secrets = {
+      smpt_gmail_app_password = root0400;
+      ssh_git_private_key = { owner = "steph"; group = "root"; mode = "0400"; };
+      ssh_git_public_key = { owner = "steph"; group = "root"; mode = "0400"; };
+      wireguard_server_private_key = root0400;
+      wireguard_server_public_key = root0400;
+      wireguard_client_laptop_preshared_key = root0400;
+      wireguard_client_phone_preshared_key = root0400;
+    };
+  };
 
 }
 

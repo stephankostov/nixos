@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, osConfig, pkgs, ... }:
 
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -65,7 +65,7 @@
       "github.com" = {
         hostname = "github.com";           # optional but explicit
         user = "git";                      # common for GitHub
-        identityFile = [ "~/.ssh/git" ];
+        identityFile = [  osConfig.sops.secrets.ssh_git_private_key.path ];
         identitiesOnly = true;             # recommended
       };
     };

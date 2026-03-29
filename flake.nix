@@ -9,6 +9,8 @@
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
@@ -20,7 +22,7 @@
     ];
   };
 
-  outputs = { self, nixpkgs, home-manager, vscode-server, nixos-raspberrypi, ... }:
+  outputs = { self, nixpkgs, home-manager, vscode-server, nixos-raspberrypi, sops-nix, ... }:
     let
       lib = nixpkgs.lib;
     in {
@@ -73,6 +75,8 @@
               home-manager.useUserPackages = true;
               home-manager.users.steph = { imports = [ ./home.nix ]; };
             }
+
+            sops-nix.nixosModules.sops
 
             vscode-server.nixosModules.default
             ./modules/vscode-server.nix
