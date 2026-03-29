@@ -121,7 +121,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${ipChangeDetectScript}";
-        LoadCredential = "smpt_gmail_app_password:/root/credstore/smpt_gmail_app_password";
+        LoadCredential = "smpt_gmail_app_password:${config.sops.secrets.smpt_gmail_app_password.path}";
       };
       path = [ pkgs.python3 ];
     };
