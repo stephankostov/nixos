@@ -15,6 +15,8 @@ in
       wireguard_server_public_key = root0400;
       wireguard_client_laptop_preshared_key = root0400;
       wireguard_client_phone_preshared_key = root0400;
+      restic_password = root0400;
+      rclone_conf = root0400;
     };
   };
 }

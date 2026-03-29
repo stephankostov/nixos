@@ -16,6 +16,7 @@ in
       ./services.nix
       ./secrets.nix
       ./script-services.nix
+      ./backup.nix
     ];
 
   time.timeZone = "Europe/London";
