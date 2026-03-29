@@ -210,11 +210,7 @@ in
     dataDir = "/var/lib/syncthing";
     configDir = "/var/lib/syncthing/.config/syncthing";
     openDefaultPorts = true;
-    settings = {
-      gui = {
-        address = "0.0.0.0:8384"; # tried to get webui to work non-locally but does not. works by ssh forwarding this port.
-      };
-    };
+    guiAddress = "0.0.0.0:8384";
   };
 
   services.qbittorrent = {
