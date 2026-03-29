@@ -143,11 +143,12 @@ in
 
   networking.firewall.allowedTCPPorts = [ 
     8123 # home-assistant
-    62180 # wireguard
+    8384 # syncthing
   ];
 
   networking.firewall.allowedUDPPorts = [
     62180  # WireGuard listenPort
+    8384
   ];
 
   boot.kernel.sysctl = {
@@ -193,6 +194,29 @@ in
 
   users.groups.media = {};
   users.users.plex.extraGroups = [ "media" ];
+
+  users.users.syncthing = {
+    isSystemUser = true;
+    group = "syncthing";
+  };
+
+  users.groups.syncthing = {};
+  users.groups.media = {};
+
+  services.syncthing = {
+    enable = true;
+    user = "syncthing";
+    group = "syncthing";
+    dataDir = "/var/lib/syncthing";
+    configDir = "/var/lib/syncthing/.config/syncthing";
+    openDefaultPorts = true;
+    settings = {
+      gui = {
+        address = "0.0.0.0:8384"; # tried to get webui to work non-locally but does not. works by ssh forwarding this port.
+      };
+    };
+  };
+
 
 }
 
