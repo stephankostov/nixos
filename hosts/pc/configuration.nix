@@ -6,7 +6,6 @@
 
 let 
 
-  root0400 = { owner = "root"; group = "root"; mode = "0400"; };
 in
 {
   imports =

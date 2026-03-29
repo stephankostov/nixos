@@ -1,4 +1,7 @@
 { config, pkgs, ... }:
+let 
+  root0400 = { owner = "root"; group = "root"; mode = "0400"; };
+in
 {
     sops = {
         defaultSopsFile = repoRoot + "/secrets/secrets.json";
