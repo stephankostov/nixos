@@ -131,6 +131,7 @@ in
     ip-change-detect = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
+        OnBootSec = "1min";
         OnUnitActiveSec = "10min";
         Unit = "ip-change-detect.service";
       };
