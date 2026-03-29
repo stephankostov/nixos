@@ -217,6 +217,24 @@ in
     };
   };
 
+  services.qbittorrent = {
+    enable = true;
+    openFirewall = true;
+    torrentingPort = 64701;
+    webuiPort = 8040;
+    user = "qbittorrent"; 
+    group = "media";
+    profileDir = "/var/lib/qbittorrent";  
+    serverConfig = {
+      LegalNotice.Accepted = true;
+      Preferences = {
+        General = {
+          Locale = "en_GB";
+        };
+      };
+    };
+  };
+
 
 }
 
