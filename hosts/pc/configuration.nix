@@ -96,6 +96,8 @@ in
      git-lfs
      fast-cli
      gcc
+     sops
+     age
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -171,7 +173,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${thermalShutdownScript}/bin/thermal-shutdown.py --max-c 99 --persist-sec 600";
-        LoadCredential = "smpt_gmail_app_password:/etc/credstore/smpt_gmail_app_password";
+        LoadCredential = "smpt_gmail_app_password:${config.sops.secrets.smpt_gmail_app_password.path}";
       };
       path = [ pkgs.lm_sensors pkgs.python3 pkgs.util-linux pkgs.coreutils ];
     };
@@ -214,6 +216,17 @@ in
   systemd.tmpfiles.rules = [
   "w /sys/class/graphics/fbcon/cursor_blink - - - - 0" # disable cursor blink on default display (tty1)
   ];
+
+  sops = {
+    defaultSopsFile = repoRoot + "/secrets/secrets.json";
+    defaultSopsFormat = "json";
+    age.keyFile = "/root/.config/age/sops-nix-keys.txt";
+    secrets = {
+      smpt_gmail_app_password = root0400;
+      ssh_git_private_key = { owner = "steph"; group = "root"; mode = "0400"; };
+      ssh_git_public_key = { owner = "steph"; group = "root"; mode = "0400"; };
+    };
+  };
 
 }
 

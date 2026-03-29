@@ -42,6 +42,8 @@
               home-manager.users.steph = { imports = [ ./home.nix ]; };
             }
 
+            sops-nix.nixosModules.sops
+
             vscode-server.nixosModules.default
             {
               services.vscode-server.enable = true;
