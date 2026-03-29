@@ -54,13 +54,5 @@
         user = "qbittorrent"; 
         group = "media";
         profileDir = "/var/lib/qbittorrent";  
-        serverConfig = {
-        LegalNotice.Accepted = true;
-        Preferences = {
-            General = {
-            Locale = "en_GB";
-            };
-        };
-        };
     };
 }

@@ -65,7 +65,7 @@
       "github.com" = {
         hostname = "github.com";           # optional but explicit
         user = "git";                      # common for GitHub
-        identityFile = [  osConfig.sops.secrets.ssh_git_private_key.path ];
+        identityFile = [  osConfig.sops.secrets.ssh_git.path ];
         identitiesOnly = true;             # recommended
       };
     };
