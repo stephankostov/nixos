@@ -15,7 +15,7 @@ in
       ./networking.nix
       ./services.nix
       ./secrets.nix
-      ./systemd-services.nix
+      ./script-services.nix
     ];
 
   time.timeZone = "Europe/London";

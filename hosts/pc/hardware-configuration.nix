@@ -21,6 +21,15 @@
     { device = "/dev/disk/by-label/boot";
       fsType = "vfat";
     };
+  fileSystems."/mnt/data" = {
+    device = "/dev/disk/by-uuid/C4AAD0FFAAD0EF44";
+    fsType = "ntfs-3g";
+    options = [ 
+      "rw"         
+      "uid=1000"
+      "gid=100"
+    ];
+  };
 
   swapDevices = [ ];
 

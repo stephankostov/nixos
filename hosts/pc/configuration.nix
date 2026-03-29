@@ -5,41 +5,19 @@
 { config, lib, pkgs, repoRoot, ... }:
 
 let 
-  thermalShutdownScript = pkgs.writeTextFile {
-    name = "thermal-shutdown.py";
-    executable = true;
-    destination = "/bin/thermal-shutdown.py";
-    text = builtins.readFile (repoRoot + "/scripts/thermal-shutdown.py");
-  };
-  fanControlScript = pkgs.writeTextFile {
-    name = "fan-control.py";
-    executable = true;
-    destination = "/bin/fan-control.py";
-    text = builtins.readFile (repoRoot + "/scripts/fan-control.py");
-  };
-  idleShutdownScript = pkgs.writeTextFile {
-    name = "idle-shutdown.py";
-    executable = true;
-    destination = "/bin/idle-shutdown.py";
-    text = builtins.readFile (repoRoot + "/scripts/idle-shutdown.py");
-  };
+
   root0400 = { owner = "root"; group = "root"; mode = "0400"; };
 in
 {
   imports =
     [
       ./hardware-configuration.nix
+      ./script-services.nix
+      ./users.nix
+      ./networking.nix
+      ./boot.nix
+      ./secrets.nix
     ];
-
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.efiInstallAsRemovable = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.efi.efiSysMountPoint = "/boot"; # Assuming /mnt/boot is mounted during installation
-  boot.loader.grub.useOSProber = true;
-  boot.loader.timeout = 4;
-  boot.supportedFilesystems = [ "ntfs" ];
 
   time.timeZone = "Europe/London";
 
@@ -49,34 +27,21 @@ in
     keyMap = "uk";
   };
 
-  fileSystems."/mnt/data" = {
-    device = "/dev/disk/by-uuid/C4AAD0FFAAD0EF44";
-    fsType = "ntfs-3g";
-    options = [ 
-      "rw"         
-      "uid=1000"
-      "gid=100"
-    ];
-  };
+  nixpkgs.config.allowUnfree = true;
 
-  security = {
-    sudo.wheelNeedsPassword = false;
-  };
+  system.stateVersion = "24.11"; 
 
-  users = {
-    mutableUsers = false; 
-    users = {
-      root = {
-        hashedPassword = "$6$nix_user_root$Z.Bf0Ldzv01r82pXOLwCTTEcUuicabL3H0Kh0Lx/VKWzKRs2IZXBcvq/AbuIEh0hBSplAfY.RPZ5UB0ml3YFo/";
-      };
-      steph = {
-        isNormalUser = true;
-        extraGroups = [ "wheel" "networkmanager" ];
-        hashedPassword = "$6$nix_user_steph$VVxsarx0BA1RgezQ3GSeeYs.Y0UHmK6R6H8pO8TrBLIc0h97uLiOEjrCooMEN2lFYFTUgSodFZ3r6z8wgAyUD/";
-        openssh.authorizedKeys.keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOnG6J0/Ekn3UMcf2wxaN02CrT5U10FCVaZWGHTOjXMP stephank179@gmail.com"
-        ];
-      };
+  nix = {
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      substituters = [ "https://cuda-maintainers.cachix.org" ];
+      trusted-public-keys = [  "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E=" ];
+      trusted-users = [ "root" "steph" ];
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than +7";
     };
   };
 
@@ -101,52 +66,6 @@ in
      age
   ];
 
-  nixpkgs.config.allowUnfree = true;
-
-  networking = {
-    networkmanager.enable = true;
-    hostName = "stephs-pc";
-    interfaces = {
-      enp4s0 = {
-        ipv4.addresses = [ {
-          address = "192.168.0.50";
-          prefixLength = 24;
-        } ];
-        wakeOnLan = {
-          enable = true;
-        };
-      };
-    };
-    defaultGateway = "192.168.0.1";
-    nameservers = [ "1.1.1.1" "1.0.0.1" ];
-
-  };
-
-  services.openssh = {
-    enable = true;
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-      PermitRootLogin = "yes";
-    };
-  };
-
-  system.stateVersion = "24.11"; 
-
-  nix = {
-    settings = {
-      experimental-features = [ "nix-command" "flakes" ];
-      substituters = [ "https://cuda-maintainers.cachix.org" ];
-      trusted-public-keys = [  "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E=" ];
-      trusted-users = [ "root" "steph" ];
-    };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than +7";
-    };
-  };
-
   programs.tmux = {
     enable = true;
     extraConfig = ''
@@ -155,79 +74,9 @@ in
     '';
   };
 
-  systemd.services = {
-    fan-control = {
-      description = "Software fan curve via sensors + liquidctl";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "simple";
-        User = "root";
-        Restart = "always";
-        RestartSec = "5s";
-        ExecStart = "${fanControlScript}/bin/fan-control.py --interval 30 --curve 30:30 50:60 80:100";
-      };
-      path = [ pkgs.lm_sensors pkgs.liquidctl pkgs.python3 pkgs.coreutils ];
-    };
-    thermal-shutdown = {
-      description = "Shutdown if temperatures stay too high";
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${thermalShutdownScript}/bin/thermal-shutdown.py --max-c 99 --persist-sec 600";
-        LoadCredential = "smpt_gmail_app_password:${config.sops.secrets.smpt_gmail_app_password.path}";
-      };
-      path = [ pkgs.lm_sensors pkgs.python3 pkgs.util-linux pkgs.coreutils ];
-    };
-    idle-shutdown = {
-      description = "Shutdown system if idle";
-      serviceConfig = {
-        Type = "simple";
-        User = "root";
-        ExecStart = "${idleShutdownScript}/bin/idle-shutdown.py --threshold 10 --checks 6 --between-sec 60";
-      };
-      path = [ pkgs.systemd pkgs.python3 ];
-    };
-  };
-
-  systemd.timers = {
-    thermal-shutdown = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnBootSec = "2min";
-        OnUnitActiveSec = "60s";
-        Unit = "thermal-shutdown.service";
-      };
-    };
-    nightly-shutdown = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = [
-          "*-*-* 23:00:00"
-          "*-*-* 00:00:00"
-          "*-*-* 01:00:00"
-          "*-*-* 03:00:00"
-          "*-*-* 05:00:00"
-        ];
-        Persistent = false;
-        Unit = "idle-shutdown.service";
-      };
-    };
-  };
-
   systemd.tmpfiles.rules = [
   "w /sys/class/graphics/fbcon/cursor_blink - - - - 0" # disable cursor blink on default display (tty1)
   ];
-
-  sops = {
-    defaultSopsFile = repoRoot + "/secrets/secrets.json";
-    defaultSopsFormat = "json";
-    age.keyFile = "/root/.config/age/sops-nix-keys.txt";
-    secrets = {
-      smpt_gmail_app_password = root0400;
-      ssh_git_private_key = { owner = "steph"; group = "root"; mode = "0400"; };
-      ssh_git_public_key = { owner = "steph"; group = "root"; mode = "0400"; };
-    };
-  };
 
 }
 
