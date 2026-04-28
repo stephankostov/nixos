@@ -1,4 +1,13 @@
 { config, lib, pkgs, ... }:
+let 
+  cuda = pkgs.cudaPackages_13;
+  cudaLibs = with cuda; [
+    cudatoolkit
+    cudnn
+    libcusparse_lt
+    # nccl          
+  ];
+in
 {
 
   config = {
@@ -7,9 +16,9 @@
     nixpkgs.config.cudaSupport = true;
     environment.systemPackages = with pkgs; [
       linuxPackages.nvidia_x11
-      cudaPackages_12_6.cudatoolkit
       nvtopPackages.full
-    ];
+      glibc.bin
+    ] ++ cudaLibs;
 
     # Load nvidia driver for Xorg and Wayland
     services.xserver.videoDrivers = [ "nvidia" ];
@@ -47,8 +56,17 @@
     };
 
     environment.variables = {
-      CUDA_PATH = "${pkgs.cudaPackages_12_6.cudatoolkit}";
+      CUDA_PATH = "${cuda.cudatoolkit}";
     };
+
+    environment.etc."ld-nix.so.preload".text = "";
+
+    # this is some C stuff that allows Triton to work. Triton searches in /sbin/ldconfig for C libraries. This creates these in there. "This enables nix-ld which sets up a proper FHS-like environment including /sbin/ldconfig automatically, making torch.compile, triton, and any other tool that hardcodes FHS paths work without any per-project workarounds."
+    system.activationScripts.ldconfig.text = ''
+      mkdir -p /sbin
+      ln -sf ${pkgs.glibc.bin}/bin/ldconfig /sbin/ldconfig
+    '';
+    programs.nix-ld.enable = true; 
 
   };
 }

@@ -16,9 +16,13 @@
   nixConfig = {
     extra-substituters = [
       "https://nixos-raspberrypi.cachix.org"
+      "https://cache.nixos-cuda.org"
+      "https://cuda-maintainers.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+      "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+      "cache.nixos-cuda.org-1:dn11R2MsKRK0LMjxoJFO0h5L3fK3TnpbcFMZAGYlCGE="
     ];
   };
 
