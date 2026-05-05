@@ -62,6 +62,7 @@ in
      gcc
      sops
      age
+     claude-code
   ];
 
   programs.tmux = {
