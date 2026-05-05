@@ -2,15 +2,11 @@
 {
   config = {
     environment.systemPackages = with pkgs; [ 
-      (python311.withPackages (ps: with ps; [
-        pip
-        pytorch-bin
-        huggingface-hub
-      ]))
+      # installing the python package wasn't working. 
+      # python versions managed per-project anyway with uv. no global python installed. 
       uv
-      nix-ld # for dynamic dependancy linking
+      nix-ld
     ];
     programs.nix-ld.enable = true;
   };
-  
 }

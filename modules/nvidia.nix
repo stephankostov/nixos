@@ -59,14 +59,34 @@ in
       CUDA_PATH = "${cuda.cudatoolkit}";
     };
 
-    environment.etc."ld-nix.so.preload".text = "";
-
-    # this is some C stuff that allows Triton to work. Triton searches in /sbin/ldconfig for C libraries. This creates these in there. "This enables nix-ld which sets up a proper FHS-like environment including /sbin/ldconfig automatically, making torch.compile, triton, and any other tool that hardcodes FHS paths work without any per-project workarounds."
-    system.activationScripts.ldconfig.text = ''
-      mkdir -p /sbin
-      ln -sf ${pkgs.glibc.bin}/bin/ldconfig /sbin/ldconfig
-    '';
     programs.nix-ld.enable = true; 
+    # HACK: torch.compile / triton hardcodes the path '/sbin/ldconfig' to discover
+    # CUDA libraries at runtime (see triton/backends/nvidia/driver.py). On NixOS,
+    # /sbin/ldconfig either doesn't exist or points to the real glibc ldconfig which
+    # tries to read a cache file from the read-only Nix store
+    # (/nix/store/.../etc/ld.so.cache), causing it to exit with status 1.
+    #
+    # The fix: make /sbin/ldconfig a wrapper script that intercepts the specific
+    # `ldconfig -p` call triton makes (used to find libcuda.so.1) and returns the
+    # correct path manually. All other ldconfig calls are forwarded to the real binary.
+    #
+    # libcuda.so.1 lives at /run/opengl-driver/lib/ on NixOS — this is the NVIDIA
+    # userspace driver library injected by the system at runtime.
+    # this is some C stuff that allows Triton to work. Triton searches in /sbin/ldconfig for C libraries. This creates these in there. "This enables nix-ld which sets up a proper FHS-like environment including /sbin/ldconfig automatically, making torch.compile, triton, and any other tool that hardcodes FHS paths work without any per-project workarounds."
+    system.activationScripts.ldconfig-compat.text = 
+      let
+        fakeLocalConfig = pkgs.writeShellScript "ldconfig-wrapper" ''
+          if [ "$1" = "-p" ]; then
+            echo "libcuda.so.1 (libc6,x86-64) => /run/opengl-driver/lib/libcuda.so.1"
+            echo "libcuda.so (libc6,x86-64) => /run/opengl-driver/lib/libcuda.so.1"
+          else
+            exec ${pkgs.glibc.bin}/bin/ldconfig "$@"
+          fi
+        '';
+      in ''
+        mkdir -p /sbin
+        ln -sf ${fakeLocalConfig} /sbin/ldconfig
+      '';
 
   };
 }

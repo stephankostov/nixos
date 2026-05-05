@@ -59,7 +59,6 @@ in
      unzip 
      openrgb-with-all-plugins
      git-lfs
-     fast-cli
      gcc
      sops
      age
