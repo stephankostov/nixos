@@ -49,9 +49,14 @@ in
       serviceConfig = {
         Type = "simple";
         User = "root";
-        ExecStart = "${idleShutdownScript}/bin/idle-shutdown.py --threshold 10 --checks 6 --between-sec 60";
+        ExecStart = "${idleShutdownScript}/bin/idle-shutdown.py --checks 15 --between-sec 120";
       };
-      path = [ pkgs.systemd pkgs.python3 ];
+      path = [
+        pkgs.systemd
+        pkgs.python3
+        pkgs.procps
+        pkgs.coreutils
+      ];
     };
   };
 
