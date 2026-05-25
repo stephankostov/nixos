@@ -22,13 +22,14 @@
       fsType = "vfat";
     };
   fileSystems."/mnt/data" = {
-    device = "/dev/disk/by-uuid/C4AAD0FFAAD0EF44";
+    device = "/dev/disk/by-partuuid/24d77d31-8efe-460e-a2b2-4ba388cf42ca";
     fsType = "ntfs-3g";
-    options = [ 
-      "rw"         
-      "uid=1000"
-      "gid=100"
-    ];
+    options = [ "rw" "uid=1000" "gid=100" "nofail"];
+  };
+  fileSystems."/mnt/data2" = {
+   device = "/dev/disk/by-label/data2";
+    fsType = "ext4";
+    options = [ "defaults" "noatime" "nofail" ];
   };
 
   swapDevices = [ ];
