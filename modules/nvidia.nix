@@ -88,5 +88,17 @@ in
         ln -sf ${fakeLocalConfig} /sbin/ldconfig
       '';
 
+    systemd.services.nvidia-power-limit = {
+      description = "Set NVIDIA GPU power limit";
+      after = [ "nvidia-persistenced.service" ];
+      wants = [ "nvidia-persistenced.service" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${config.hardware.nvidia.package.bin}/bin/nvidia-smi -pl 315";
+      };
+    };
+
   };
 }
