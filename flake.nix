@@ -43,7 +43,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.steph = { imports = [ ./home.nix ]; };
+              home-manager.users.steph = { imports = [ ./home.nix ./hosts/pc/home.nix ]; };
             }
 
             sops-nix.nixosModules.sops

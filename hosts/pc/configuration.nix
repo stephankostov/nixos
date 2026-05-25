@@ -16,7 +16,6 @@ in
       ./networking.nix
       ./boot.nix
       ./secrets.nix
-      ./ml.nix
     ];
 
   time.timeZone = "Europe/London";

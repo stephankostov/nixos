@@ -53,7 +53,7 @@
   #  /etc/profiles/per-user/steph/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    # HF_HOME = "/mnt/data2/hf_cache";
   };
 
   # Let Home Manager install and manage itself.
