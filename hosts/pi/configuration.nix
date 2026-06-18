@@ -39,6 +39,7 @@ in
      wireguard-tools
      age
      sops
+     wakeonlan
   ];
 
   nixpkgs.config.allowUnfree = true;
