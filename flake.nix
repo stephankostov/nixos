@@ -56,6 +56,7 @@
             ./modules/nvidia.nix
             ./modules/python.nix
             ./modules/devenv.nix
+            ./modules/tailscale.nix
           ];
         };
 
