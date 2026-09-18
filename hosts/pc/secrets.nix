@@ -10,6 +10,7 @@ in
         secrets = {
             smpt_gmail_app_password = root0400;
             ssh_git = { owner = "steph"; group = "root"; mode = "0400"; };
+            eduroam_env = root0400;
         };
     };
 }
