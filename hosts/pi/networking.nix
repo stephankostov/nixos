@@ -26,9 +26,11 @@
             allowedTCPPorts = [ 
                 8123 # home-assistant
                 8384 # syncthing
+                64701 # qbittorrent
              ];
             allowedUDPPorts = [ 
                 62180  # WireGuard listenPort
+                64701 # qbittorrent
              ];
         };
     };
