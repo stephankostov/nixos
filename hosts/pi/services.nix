@@ -29,11 +29,18 @@
     };
 
     services.plex = {
-        enable = true;
+        enable = false;
         openFirewall = true;
         user = "plex";
         group = "media";
         dataDir = "/var/lib/plex";
+    };
+
+    services.jellyfin = {
+        enable = true;
+        openFirewall = true;   # opens TCP 8096/8920 and UDP 1900/7359
+        group = "media";       # same group as Plex, so it can read your library
+        dataDir = "/var/lib/jellyfin";  # where to store metadata and config
     };
 
     services.syncthing = {
