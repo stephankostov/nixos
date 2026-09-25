@@ -78,13 +78,6 @@
     lfs.enable = true;
   };
 
-  programs.bash = {
-    enable = true;
-    bashrcExtra = ''
-      eval "$(direnv hook bash)"
-    '';
-  };
-
   xdg.enable = true;
 
   xdg.dataFile."jupyter/kernels/devshell/kernel.json" = {
