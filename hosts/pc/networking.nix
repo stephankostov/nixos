@@ -2,19 +2,8 @@
 {
   networking = {
     hostName = "stephs-pc";
-    # interfaces = {
-    #   enp4s0 = {
-    #     ipv4.addresses = [ {
-    #       address = "192.168.0.50";
-    #       prefixLength = 24;
-    #     } ];
-    #     wakeOnLan = {
-    #       enable = true;
-    #     };
-    #   };
-    # };
-    # defaultGateway = "192.168.0.1";
-    # nameservers = [ "1.1.1.1" "1.0.0.1" ];
+    # addressing is left to NetworkManager (DHCP) so ethernet works on any network. at home the router has a DHCP reservation pinning enp4s0 to 192.168.0.50.
+    interfaces.enp4s0.wakeOnLan.enable = true;
     networkmanager = {
        enable = true;
        # hand DNS to systemd-resolved rather than writing resolv.conf directly. without it, tailscale's MagicDNS owns resolv.conf and forwards to whatever upstreams NM last gave it; an eduroam reconnect can leave that list empty ("no upstream resolvers set, returning SERVFAIL") until NM is restarted. with resolved, tailscale only configures the tailscale0 link and wlo1 keeps its own servers.
