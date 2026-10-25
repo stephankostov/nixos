@@ -40,6 +40,7 @@ in
      age
      sops
      wakeonlan
+     claude-code
   ];
 
   nixpkgs.config.allowUnfree = true;
