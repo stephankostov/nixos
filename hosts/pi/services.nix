@@ -43,6 +43,14 @@
         dataDir = "/var/lib/jellyfin";  # where to store metadata and config
     };
 
+    services.audiobookshelf = {
+        enable = true;
+        openFirewall = true;
+        host = "0.0.0.0";      # bind all interfaces; default 127.0.0.1 is Pi-local only
+        port = 8041;           # 8040 is qBittorrent's web UI
+        group = "media";       # read access to /mnt/storage/media/books
+    };
+
     services.syncthing = {
         enable = true;
         user = "syncthing";
