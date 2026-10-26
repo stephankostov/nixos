@@ -64,6 +64,7 @@ in
      sops
      age
      claude-code
+     rclone
   ];
 
   programs.tmux = {
