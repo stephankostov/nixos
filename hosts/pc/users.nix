@@ -8,7 +8,7 @@
     mutableUsers = false; 
     users = {
       root = {
-        hashedPassword = "$6$nix_user_root$Z.Bf0Ldzv01r82pXOLwCTTEcUuicabL3H0Kh0Lx/VKWzKRs2IZXBcvq/AbuIEh0hBSplAfY.RPZ5UB0ml3YFo/";
+        hashedPassword = "$6$nYgn7Rp9uphLfFrf$WWhAPMGBrFa3N7MlwEPJW4YCgDfIDVMC5icdy0EzBKiar1kswBGbZ47FTN0/AdsHOmGxwKlvHg9.8aF7bOEO11";
       };
       steph = {
         isNormalUser = true;
