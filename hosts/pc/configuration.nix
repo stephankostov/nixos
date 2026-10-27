@@ -17,6 +17,7 @@ in
       ./boot.nix
       ./secrets.nix
       ./vpn.nix
+      ./kerberos.nix
     ];
 
   time.timeZone = "Europe/London";

@@ -11,11 +11,20 @@
     jumphost = {
       hostname = "staff.ssh.inf.ed.ac.uk";
       user = "s2764478";
+      extraOptions = {
+        GSSAPIAuthentication = "yes";
+        GSSAPIDelegateCredentials = "yes";
+      };
     };
     mlp = {
-      hostname = "mlp";
+      # full name so Kerberos can find the host's service principal.
+      hostname = "mlp.inf.ed.ac.uk";
       user = "s2764478";
       proxyJump = "jumphost";
+      extraOptions = {
+        GSSAPIAuthentication = "yes";
+        GSSAPIDelegateCredentials = "yes";
+      };
     };
   };
 
