@@ -59,6 +59,19 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  # Bash history: keep a lot, and write each command to ~/.bash_history as soon
+  # as it runs, so a dropped connection or several open shells lose nothing.
+  # histappend is in home-manager's default shellOptions.
+  programs.bash = {
+    enable = true;
+    historySize = 100000;
+    historyFileSize = 200000;
+    historyControl = [ "ignoredups" ];
+    initExtra = ''
+      PROMPT_COMMAND="history -a''${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+    '';
+  };
+
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
