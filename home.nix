@@ -61,12 +61,26 @@
 
   programs.ssh = {
     enable = true;
-    matchBlocks = {
+    enableDefaultConfig = false;
+    settings = {
+      # the old home-manager defaults, kept explicitly.
+      "*" = {
+        ForwardAgent = false;
+        AddKeysToAgent = "no";
+        Compression = false;
+        ServerAliveInterval = 0;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+        ControlMaster = "no";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ControlPersist = "no";
+      };
       "github.com" = {
-        hostname = "github.com";           # optional but explicit
-        user = "git";                      # common for GitHub
-        identityFile = [  osConfig.sops.secrets.ssh_git.path ];
-        identitiesOnly = true;             # recommended
+        HostName = "github.com";
+        User = "git";
+        IdentityFile = osConfig.sops.secrets.ssh_git.path;
+        IdentitiesOnly = true;
       };
     };
   };
