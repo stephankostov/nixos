@@ -11,6 +11,8 @@ in
             smpt_gmail_app_password = root0400;
             ssh_git = { owner = "steph"; group = "root"; mode = "0400"; };
             eduroam_env = root0400;
+            uni_vpn_ovpn = root0400;
+            uni_vpn_auth = root0400;
         };
     };
 }
