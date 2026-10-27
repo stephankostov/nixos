@@ -73,8 +73,10 @@
 
   programs.git = {
     enable = true;
-    userName = "stephankostov";
-    userEmail = "stephank179@gmail.com";
+    settings.user = {
+      name = "stephankostov";
+      email = "stephank179@gmail.com";
+    };
     lfs.enable = true;
   };
 
