@@ -13,6 +13,8 @@ in
             eduroam_env = root0400;
             uni_vpn_ovpn = root0400;
             uni_vpn_auth = root0400;
+            # binary keytab, its own sops file: see kerberos.nix.
+            krb5_keytab = { owner = "steph"; group = "root"; mode = "0400"; format = "binary"; sopsFile = repoRoot + "/secrets/krb5.keytab"; };
         };
     };
 }
