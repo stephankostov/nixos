@@ -22,6 +22,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Lets the VS Code Remote SSH server's prebuilt node binary run on NixOS
+    programs.nix-ld.enable = true;
+
     environment.etc."vscode-server-extensions".source = let
       subDir = "share/vscode/extensions";
       combinedExtensionsDrv = pkgs.buildEnv {
