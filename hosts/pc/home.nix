@@ -6,6 +6,15 @@
     HF_HOME = "/mnt/data2/hf_cache";
   };
 
+  # `claude-remote [dir]`: runs Claude Remote Control in a detached tmux session.
+  home.packages = [
+    (pkgs.writeShellApplication {
+      name = "claude-remote";
+      runtimeInputs = [ pkgs.tmux ];
+      text = builtins.readFile ../../scripts/claude-remote.sh;
+    })
+  ];
+
   # university machines. mlp is only reachable through the informatics jumphost.
   programs.ssh.settings = {
     jumphost = {
