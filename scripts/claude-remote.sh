@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Starts Claude Remote Control inside a detached tmux session, so it keeps
-# running after you disconnect. Connect from claude.ai/code or the Claude app.
+# Starts an interactive Claude Code session with Remote Control enabled, inside
+# a detached tmux session so it survives disconnects. Reach it from
+# claude.ai/code or the Claude app, or locally with `tmux attach`.
 # Usage: claude-remote [project-dir]
 
 SESSION="claude-remote"
@@ -11,8 +12,8 @@ if tmux has-session -t "$SESSION" 2>/dev/null; then
   exit 0
 fi
 
-# Restart claude automatically if it ever exits.
+# If claude exits, drop to a shell so the tmux session stays open.
 tmux new-session -d -s "$SESSION" -c "$DIR" \
-  "while true; do claude remote-control --name '${HOSTNAME}'; echo 'claude exited, restarting in 5s...'; sleep 5; done"
+  "claude --remote-control '${HOSTNAME}'; exec bash"
 
 echo "Started in $DIR. Attach with: tmux attach -t $SESSION (detach with Ctrl-b d)"

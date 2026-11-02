@@ -6,7 +6,7 @@
     HF_HOME = "/mnt/data2/hf_cache";
   };
 
-  # `claude-remote [dir]`: runs Claude Remote Control in a detached tmux session.
+  # `claude-remote [dir]`: interactive Claude Code with Remote Control, in a detached tmux session.
   home.packages = [
     (pkgs.writeShellApplication {
       name = "claude-remote";
