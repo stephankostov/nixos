@@ -35,6 +35,12 @@
         "A+ /var/lib/hass - - - - group:hass:rwX,default:group:hass:rwX"
     ];
 
+    # /var/lib/hass is a git repo owned by root; let steph use git in it.
+    programs.git = {
+        enable = true;
+        config.safe.directory = "/var/lib/hass";
+    };
+
     services.plex = {
         enable = false;
         openFirewall = true;
