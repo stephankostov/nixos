@@ -13,7 +13,7 @@
             };
             steph = {
                 isNormalUser = true;
-                extraGroups = [ "wheel" "networkmanager" "media" ];
+                extraGroups = [ "wheel" "networkmanager" "media" "hass" ];
                 hashedPassword = "$6$nix_user_steph$VVxsarx0BA1RgezQ3GSeeYs.Y0UHmK6R6H8pO8TrBLIc0h97uLiOEjrCooMEN2lFYFTUgSodFZ3r6z8wgAyUD/";
                 openssh.authorizedKeys.keys = [
                 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIACR9JUn1C9HQdlay+PhnK0YvZq7mxQJ5a9UUtA9q6vq steph@Stephans-MacBook-Pro.local"
@@ -22,6 +22,7 @@
         };
         groups = {
             media = {};
+            hass = {};  # write access to /var/lib/hass (see services.nix)
         };
     };
 

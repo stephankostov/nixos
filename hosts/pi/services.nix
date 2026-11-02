@@ -28,6 +28,13 @@
         };
     };
 
+    # Home Assistant runs as root in Docker, so its files are root-owned.
+    # Give the hass group read/write on existing files, and a default ACL so
+    # files HA creates later are group-writable too.
+    systemd.tmpfiles.rules = [
+        "A+ /var/lib/hass - - - - group:hass:rwX,default:group:hass:rwX"
+    ];
+
     services.plex = {
         enable = false;
         openFirewall = true;
