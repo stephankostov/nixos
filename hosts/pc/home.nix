@@ -6,12 +6,12 @@
     HF_HOME = "/mnt/data2/hf_cache";
   };
 
-  # `claude-remote [dir] [session]`: Claude Code Remote Control server mode, in a tmux session.
+  # `claude-server [dir] [session]`: Claude Code Remote Control server mode, in a tmux session.
   home.packages = [
     (pkgs.writeShellApplication {
-      name = "claude-remote";
+      name = "claude-server";
       runtimeInputs = [ pkgs.tmux pkgs.git ];
-      text = builtins.readFile ../../scripts/claude-remote.sh;
+      text = builtins.readFile ../../scripts/claude-server.sh;
     })
   ];
 

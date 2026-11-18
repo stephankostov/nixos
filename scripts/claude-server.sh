@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Start (or attach to) a tmux session running Claude Code in Remote Control server mode.
 # Each conversation started from claude.ai/code or the Claude app spawns its own session.
-# Usage: claude-remote [project-dir] [session-name]
+# Usage: claude-server [project-dir] [session-name]
 set -euo pipefail
 
 PROJECT_DIR="${1:-$PWD}"
-SESSION="${2:-claude-remote}"
+SESSION="${2:-claude-server}"
 NAME="${CLAUDE_RC_NAME:-$HOSTNAME}"
 
 # Use worktree mode in git repos, otherwise share the directory
