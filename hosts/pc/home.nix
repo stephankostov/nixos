@@ -13,6 +13,9 @@
       runtimeInputs = [ pkgs.tmux pkgs.git ];
       text = builtins.readFile ../../scripts/claude-server.sh;
     })
+    # for one-off scripts and probing; projects use uv-managed pythons.
+    pkgs.python3
+    pkgs.jq
   ];
 
   # university machines. mlp is only reachable through the informatics jumphost.
