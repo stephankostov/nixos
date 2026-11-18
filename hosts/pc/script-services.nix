@@ -18,6 +18,15 @@ let
     destination = "/bin/idle-shutdown.py";
     text = builtins.readFile (repoRoot + "/scripts/idle-shutdown.py");
   };
+  # worktree mode in git repos, otherwise share the directory.
+  claudeServerScript = pkgs.writeShellScript "claude-server-service" ''
+    if ${pkgs.git}/bin/git rev-parse --is-inside-work-tree &>/dev/null; then
+      spawn=worktree
+    else
+      spawn=same-dir
+    fi
+    exec ${pkgs.claude-code}/bin/claude remote-control --name "$1" --spawn "$spawn" --permission-mode bypassPermissions
+  '';
 in
 {
 
@@ -44,6 +53,22 @@ in
       };
       path = [ pkgs.lm_sensors pkgs.python3 pkgs.util-linux pkgs.coreutils ];
     };
+    # `systemctl start claude-server@<project>` serves ~/workspace/<project>.
+    "claude-server@" = {
+      description = "Claude Code Remote Control server for ~/workspace/%i";
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      serviceConfig = {
+        Type = "simple";
+        User = "steph";
+        WorkingDirectory = "/home/steph/workspace/%i";
+        Restart = "always";
+        RestartSec = "10s";
+        ExecStart = "${claudeServerScript} %H-%i";
+      };
+      # spawned sessions get the same tools as a login shell.
+      path = [ "/run/wrappers" "/etc/profiles/per-user/steph" "/run/current-system/sw" ];
+    };
     idle-shutdown = {
       description = "Shutdown system if idle";
       serviceConfig = {
@@ -59,6 +84,8 @@ in
       ];
     };
   };
+
+  systemd.targets.multi-user.wants = [ "claude-server@kla-ficl.service" ];
 
   systemd.timers = {
     thermal-shutdown = {
