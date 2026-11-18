@@ -18,15 +18,6 @@ let
     destination = "/bin/idle-shutdown.py";
     text = builtins.readFile (repoRoot + "/scripts/idle-shutdown.py");
   };
-  # worktree mode in git repos, otherwise share the directory.
-  claudeServerScript = pkgs.writeShellScript "claude-server-service" ''
-    if ${pkgs.git}/bin/git rev-parse --is-inside-work-tree &>/dev/null; then
-      spawn=worktree
-    else
-      spawn=same-dir
-    fi
-    exec ${pkgs.claude-code}/bin/claude remote-control --name "$1" --spawn "$spawn" --permission-mode bypassPermissions
-  '';
 in
 {
 
@@ -53,20 +44,24 @@ in
       };
       path = [ pkgs.lm_sensors pkgs.python3 pkgs.util-linux pkgs.coreutils ];
     };
-    # `systemctl start claude-server@<project>` serves ~/workspace/<project>.
+    # `systemctl start claude-server@<project>` runs an interactive claude with Remote Control
+    # in ~/workspace/<project>, continuing its latest conversation. It lives in a tmux server on
+    # its own socket: `tmux -L claude-<project> attach` to /resume a different one locally.
     "claude-server@" = {
-      description = "Claude Code Remote Control server for ~/workspace/%i";
+      description = "Claude Code with Remote Control in ~/workspace/%i";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
-        Type = "simple";
+        # tmux daemonises; when claude exits the session and server end, so systemd restarts it.
+        Type = "forking";
         User = "steph";
         WorkingDirectory = "/home/steph/workspace/%i";
         Restart = "always";
         RestartSec = "10s";
-        ExecStart = "${claudeServerScript} %H-%i";
+        ExecStart = "${pkgs.tmux}/bin/tmux -L claude-%i new-session -d -s %i ${pkgs.claude-code}/bin/claude --continue --remote-control %H-%i";
+        ExecStop = "${pkgs.tmux}/bin/tmux -L claude-%i kill-server";
       };
-      # spawned sessions get the same tools as a login shell.
+      # claude's tools get the same PATH as a login shell.
       path = [ "/run/wrappers" "/etc/profiles/per-user/steph" "/run/current-system/sw" ];
     };
     idle-shutdown = {
