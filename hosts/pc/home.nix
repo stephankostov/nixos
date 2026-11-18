@@ -13,6 +13,12 @@
       runtimeInputs = [ pkgs.tmux ];
       text = builtins.readFile ../../scripts/claude-remote.sh;
     })
+    # `claude-server [dir] [session]`: Claude Code Remote Control server mode, in a tmux session.
+    (pkgs.writeShellApplication {
+      name = "claude-server";
+      runtimeInputs = [ pkgs.tmux pkgs.git ];
+      text = builtins.readFile ../../scripts/claude-server.sh;
+    })
   ];
 
   # university machines. mlp is only reachable through the informatics jumphost.
