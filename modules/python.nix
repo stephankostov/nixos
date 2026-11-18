@@ -2,8 +2,10 @@
 {
   config = {
     environment.systemPackages = with pkgs; [ 
-      # installing the python package wasn't working. 
-      # python versions managed per-project anyway with uv. no global python installed. 
+      # python versions managed per-project with uv.
+      # the global python3 is only for one-off scripts and probing; don't pip install into it.
+      python3
+      jq
       uv
       nix-ld
     ];
