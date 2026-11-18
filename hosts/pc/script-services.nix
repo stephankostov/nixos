@@ -59,7 +59,7 @@ in
         Restart = "always";
         RestartSec = "10s";
         RuntimeDirectory = "claude-server/%i";
-        ExecStart = "${pkgs.tmux}/bin/tmux -S /run/claude-server/%i/tmux new-session -d -s %i ${pkgs.claude-code}/bin/claude --continue --remote-control %H-%i";
+        ExecStart = "${pkgs.tmux}/bin/tmux -S /run/claude-server/%i/tmux new-session -d -s %i ${pkgs.claude-code}/bin/claude --continue --remote-control %H-%i --permission-mode bypassPermissions";
         # "-": after a crash the server is already gone.
         ExecStop = "-${pkgs.tmux}/bin/tmux -S /run/claude-server/%i/tmux kill-server";
       };
