@@ -13,6 +13,12 @@
       runtimeInputs = [ pkgs.tmux pkgs.git ];
       text = builtins.readFile ../../scripts/claude-server.sh;
     })
+    # `claude-attach [project]`: attach to the claude-server@<project> service's tmux session.
+    (pkgs.writeShellApplication {
+      name = "claude-attach";
+      runtimeInputs = [ pkgs.tmux ];
+      text = ''exec tmux -S "/run/claude-server/''${1:-kla-ficl}/tmux" attach'';
+    })
     # for one-off scripts and probing; projects use uv-managed pythons.
     pkgs.python3
     pkgs.jq

@@ -46,7 +46,7 @@ in
     };
     # `systemctl start claude-server@<project>` runs an interactive claude with Remote Control
     # in ~/workspace/<project>, continuing its latest conversation. It lives in a tmux server on
-    # its own socket: `tmux -L claude-<project> attach` to /resume a different one locally.
+    # its own socket: `claude-attach <project>` to /resume a different one locally.
     "claude-server@" = {
       description = "Claude Code with Remote Control in ~/workspace/%i";
       wants = [ "network-online.target" ];
@@ -58,8 +58,9 @@ in
         WorkingDirectory = "/home/steph/workspace/%i";
         Restart = "always";
         RestartSec = "10s";
-        ExecStart = "${pkgs.tmux}/bin/tmux -L claude-%i new-session -d -s %i ${pkgs.claude-code}/bin/claude --continue --remote-control %H-%i";
-        ExecStop = "${pkgs.tmux}/bin/tmux -L claude-%i kill-server";
+        RuntimeDirectory = "claude-server/%i";
+        ExecStart = "${pkgs.tmux}/bin/tmux -S /run/claude-server/%i/tmux new-session -d -s %i ${pkgs.claude-code}/bin/claude --continue --remote-control %H-%i";
+        ExecStop = "${pkgs.tmux}/bin/tmux -S /run/claude-server/%i/tmux kill-server";
       };
       # claude's tools get the same PATH as a login shell.
       path = [ "/run/wrappers" "/etc/profiles/per-user/steph" "/run/current-system/sw" ];
