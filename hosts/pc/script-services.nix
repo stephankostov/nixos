@@ -44,22 +44,6 @@ in
       };
       path = [ pkgs.lm_sensors pkgs.python3 pkgs.util-linux pkgs.coreutils ];
     };
-    claude-server = {
-      description = "Claude Code Remote Control server";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-      serviceConfig = {
-        Type = "simple";
-        User = "steph";
-        WorkingDirectory = "/home/steph";
-        Restart = "always";
-        RestartSec = "10s";
-        ExecStart = "${pkgs.claude-code}/bin/claude remote-control --name ${config.networking.hostName} --spawn same-dir --permission-mode bypassPermissions";
-      };
-      # spawned sessions get the same tools as a login shell.
-      path = [ "/run/wrappers" "/etc/profiles/per-user/steph" "/run/current-system/sw" ];
-    };
     idle-shutdown = {
       description = "Shutdown system if idle";
       serviceConfig = {
