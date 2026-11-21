@@ -47,6 +47,7 @@ in
     # `systemctl start claude-server@<project>` runs an interactive claude with Remote Control
     # in ~/workspace/<project>, continuing its latest conversation. It lives in a tmux server on
     # its own socket: `claude-attach <project>` to /resume a different one locally.
+    # See docs/claude-server.md.
     "claude-server@" = {
       description = "Claude Code with Remote Control in ~/workspace/%i";
       wants = [ "network-online.target" ];

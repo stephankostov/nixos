@@ -6,14 +6,9 @@
     HF_HOME = "/mnt/data2/hf_cache";
   };
 
-  # `claude-server [dir] [session]`: Claude Code Remote Control server mode, in a tmux session.
   home.packages = [
-    (pkgs.writeShellApplication {
-      name = "claude-server";
-      runtimeInputs = [ pkgs.tmux pkgs.git ];
-      text = builtins.readFile ../../scripts/claude-server.sh;
-    })
     # `claude-attach [project]`: attach to the claude-server@<project> service's tmux session.
+    # See docs/claude-server.md.
     (pkgs.writeShellApplication {
       name = "claude-attach";
       runtimeInputs = [ pkgs.tmux ];
