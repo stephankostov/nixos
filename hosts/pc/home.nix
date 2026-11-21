@@ -35,6 +35,14 @@
       GSSAPIAuthentication = true;
       GSSAPIDelegateCredentials = true;
     };
+    mlp1 = {
+      # full name so Kerberos can find the host's service principal.
+      HostName = "mlp1.inf.ed.ac.uk";
+      User = "s2764478";
+      ProxyJump = "jumphost";
+      GSSAPIAuthentication = true;
+      GSSAPIDelegateCredentials = true;
+    };
   };
 
 }
