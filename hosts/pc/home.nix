@@ -43,6 +43,20 @@
       GSSAPIAuthentication = true;
       GSSAPIDelegateCredentials = true;
     };
+    # EIDF GPU service. the k8s login node is only reachable through the EIDF gateway.
+    eidf-gateway = {
+      HostName = "eidf-gateway.epcc.ed.ac.uk";
+      User = "s2764478-infk8s";
+      IdentityFile = osConfig.sops.secrets.ssh_eidf.path;
+      IdentitiesOnly = true;
+    };
+    eidf-infk8s = {
+      HostName = "10.24.7.178";
+      User = "s2764478-infk8s";
+      ProxyJump = "eidf-gateway";
+      IdentityFile = osConfig.sops.secrets.ssh_eidf.path;
+      IdentitiesOnly = true;
+    };
   };
 
 }
