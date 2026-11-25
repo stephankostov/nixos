@@ -49,6 +49,9 @@
       User = "s2764478-infk8s";
       IdentityFile = osConfig.sops.secrets.ssh_eidf.path;
       IdentitiesOnly = true;
+      ControlMaster = "auto";
+      ControlPath = "~/.ssh/master-%r@%n:%p";
+      ControlPersist = "yes";
     };
     eidf-infk8s = {
       HostName = "10.24.7.178";
@@ -56,6 +59,9 @@
       ProxyJump = "eidf-gateway";
       IdentityFile = osConfig.sops.secrets.ssh_eidf.path;
       IdentitiesOnly = true;
+      ControlMaster = "auto";
+      ControlPath = "~/.ssh/master-%r@%n:%p";
+      ControlPersist = "yes";
     };
   };
 
